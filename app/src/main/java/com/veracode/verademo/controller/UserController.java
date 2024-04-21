@@ -250,10 +250,14 @@ public class UserController {
 
 			Connection connect = DriverManager.getConnection(Constants.create().getJdbcConnectionString());
 
-			String sql = "SELECT password_hint FROM users WHERE username = '" + username + "'";
-			logger.info(sql);
-			Statement statement = connect.createStatement();
-			ResultSet result = statement.executeQuery(sql);
+			PreparedStatement sqlQuery = null;
+			String sqlStmnt = "SELECT password_hint FROM users WHERE username = ?";
+
+			sqlQuery = connect.prepareStatement(sqlStmnt);
+			sqlQuery.setString(1, username);
+
+			ResultSet result = sqlQuery.executeQuery();
+			
 			if (result.first()) {
 				String password = result.getString("password_hint");
 				String formatString = "Username '" + username + "' has password: %.2s%s";
