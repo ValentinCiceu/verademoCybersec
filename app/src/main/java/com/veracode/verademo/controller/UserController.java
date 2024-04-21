@@ -158,11 +158,18 @@ public class UserController {
 			/* START EXAMPLE VULNERABILITY */
 			// Execute the query
 			logger.info("Creating the Statement");
-			String sqlQuery = "select username, password, password_hint, created_at, last_login, real_name, blab_name from users where username='"
-					+ username + "' and password='" + md5(password) + "';";
-			sqlStatement = connect.createStatement();
+			PreparedStatement loginQuery = null;
+			String loginsStmt = "select username, password, password_hint, created_at, last_login, real_name, blab_name from users where username= ?" +
+			"and password= ?;";
+
+			
+			loginQuery = connect.prepareStatement(loginsStmt);
+			loginQuery.setString(1, username);
+			loginQuery.setString(2, md5(password));
+
+
 			logger.info("Execute the Statement");
-			ResultSet result = sqlStatement.executeQuery(sqlQuery);
+			ResultSet result = loginQuery.executeQuery();
 			/* END EXAMPLE VULNERABILITY */
 
 			// Did we find exactly 1 user that matched?
