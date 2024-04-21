@@ -495,7 +495,7 @@ public class UserController {
 			
 			sqlQuery = connect.prepareStatement(sqlStmnt);	
 			sqlQuery.setString(1, username);
-			ResultSet result = sqlQuery.executeQuery();
+			ResultSet userHistoryResult = sqlQuery.executeQuery();
 			/* END EXAMPLE VULNERABILITY */
 
 			while (userHistoryResult.next()) {
