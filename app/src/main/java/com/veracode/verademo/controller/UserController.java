@@ -503,10 +503,12 @@ public class UserController {
 			}
 
 			// Get the users information
-			String sql = "SELECT username, real_name, blab_name FROM users WHERE username = '" + username + "'";
-			logger.info(sql);
-			myInfo = connect.prepareStatement(sql);
-			ResultSet myInfoResults = myInfo.executeQuery();
+			PreparedStatement sqlQuery2 = null;
+			String sqlStmnt2 = "SELECT username, real_name, blab_name FROM users WHERE username = ?";
+	
+			sqlQuery2 = connect.prepareStatement(sqlStmnt2);	
+			sqlQuery2.setString(1, username);
+			ResultSet myInfoResults = sqlQuery.executeQuery();
 			myInfoResults.next();
 
 			// Send these values to our View
