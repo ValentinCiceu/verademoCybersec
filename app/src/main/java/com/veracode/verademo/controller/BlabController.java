@@ -451,7 +451,7 @@ public class BlabController {
 				+ " SUM(if(listeners.listener=?, 1, 0)) as listeners,"
 				+ " SUM(if(listeners.status='Active',1,0)) as listening"
 				+ " FROM users LEFT JOIN listeners ON users.username = listeners.blabber"
-				+ " WHERE users.username NOT IN (\"admin\",?)" + " GROUP BY users.username" + " ORDER BY " + sort + ";";
+				+ " WHERE users.username NOT IN (admin,?)" + " GROUP BY users.username" + " ORDER BY ?;";
 
 		try {
 			logger.info("Getting Database connection");
@@ -464,6 +464,7 @@ public class BlabController {
 			blabberQuery = connect.prepareStatement(blabbersSql);
 			blabberQuery.setString(1, username);
 			blabberQuery.setString(2, username);
+			blabberQuery.setString(3, sort);
 			ResultSet blabbersResults = blabberQuery.executeQuery();
 			/* END EXAMPLE VULNERABILITY */
 
