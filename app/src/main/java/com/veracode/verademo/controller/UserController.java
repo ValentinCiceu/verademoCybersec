@@ -316,9 +316,15 @@ public class UserController {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection connect = DriverManager.getConnection(Constants.create().getJdbcConnectionString());
 
-			String sql = "SELECT username FROM users WHERE username = '" + username + "'";
-			Statement statement = connect.createStatement();
-			ResultSet result = statement.executeQuery(sql);
+			PreparedStatement sqlQuery = null;
+
+			String sqlStmnt = "SELECT password_hint FROM users WHERE username = ?";
+
+			sqlQuery = connect.prepareStatement(sqlStmnt);
+			sqlQuery.setString(1, username);
+
+			ResultSet result = sqlQuery.executeQuery();
+			
 			if (result.first()) {
 				model.addAttribute("error", "Username '" + username + "' already exists!");
 				return "register";
