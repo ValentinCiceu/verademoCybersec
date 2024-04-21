@@ -489,11 +489,13 @@ public class UserController {
 			ArrayList<String> events = new ArrayList<String>();
 
 			/* START EXAMPLE VULNERABILITY */
-			String sqlMyEvents = "select event from users_history where blabber=\"" + username
-					+ "\" ORDER BY eventid DESC; ";
-			logger.info(sqlMyEvents);
-			Statement sqlStatement = connect.createStatement();
-			ResultSet userHistoryResult = sqlStatement.executeQuery(sqlMyEvents);
+			PreparedStatement sqlQuery = null;
+			String sqlStmnt = "select event from users_history where blabber=?"
+					+ " ORDER BY eventid DESC; ";
+			
+			sqlQuery = connect.prepareStatement(sqlStmnt);	
+			sqlQuery.setString(1, username);
+			ResultSet result = sqlQuery.executeQuery();
 			/* END EXAMPLE VULNERABILITY */
 
 			while (userHistoryResult.next()) {
