@@ -42,9 +42,13 @@ public class ListenCommand implements BlabberCommand {
 
 			/* START EXAMPLE VULNERABILITY */
 			String event = username + " started listening to " + blabberUsername + " (" + result.getString(1) + ")";
-			sqlQuery = "INSERT INTO users_history (blabber, event) VALUES (\"" + username + "\", \"" + event + "\")";
-			logger.info(sqlQuery);
-			sqlStatement.execute(sqlQuery);
+			PreparedStatement sqlQuery2 = null;
+			String sqlStmt = "INSERT INTO users_history (blabber, event) VALUES (? , ?)";
+			sqlQuery2 = connect.prepareStatement(sqlStmt);
+			sqlQuery2.setString(1, username);
+			sqlQuery2.setString(2, event);
+			
+			sqlQuery2.execute();
 			/* END EXAMPLE VULNERABILITY */
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
